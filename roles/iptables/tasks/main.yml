@@ -1,0 +1,22 @@
+---
+- name: install iptables-services
+  yum:
+    name: iptables-services
+    state: present
+  environment: "{{ proxy_env | default({}) }}"
+
+- name: deploy config file
+  template:
+    src: etc/sysconfig/iptables.j2
+    dest: /etc/sysconfig/iptables
+    owner: root
+    group: root
+    mode: 0400
+    validate: iptables-restore --test %s
+  notify: restart iptables
+
+- name: start iptables
+  systemd:
+    name: iptables
+    state: started
+    enabled: yes

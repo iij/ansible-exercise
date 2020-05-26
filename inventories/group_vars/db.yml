@@ -1,0 +1,4 @@
+---
+allow_ports:
+  - protocol: tcp
+    port: 3306

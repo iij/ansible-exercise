@@ -5,9 +5,3 @@ db_user: app
 db_password: ansible
 
 server_port: 8080
-
-nginx_https_port: 8443
-
-nginx_backends:
-  - host: 192.0.2.12
-    port: "{{ server_port }}"

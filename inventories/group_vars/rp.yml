@@ -1,0 +1,14 @@
+---
+nginx_version: 1.18.0
+
+nginx_https_port: 8443
+
+nginx_backends:
+  - host: 192.0.2.12
+    port: "{{ server_port }}"
+  - host: 192.0.2.13
+    port: "{{ server_port }}"
+
+allow_ports:
+  - protocol: tcp
+    port: "{{ nginx_https_port }}"

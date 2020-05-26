@@ -1,0 +1,60 @@
+---
+- name: install yum-utils
+  yum:
+    name: yum-utils
+    state: present
+  environment: "{{ proxy_env | default({}) }}"
+
+- name: add Nginx repository
+  yum_repository:
+    name: nginx-stable
+    description: 'nginx stable repo'
+    baseurl: http://nginx.org/packages/centos/$releasever/$basearch/
+    gpgkey: https://nginx.org/keys/nginx_signing.key
+    enabled: yes
+
+- name: install Nginx
+  yum:
+    name: "nginx-{{ nginx_version }}-1.el7.ngx.x86_64"
+    state: present
+  environment: "{{ proxy_env | default({}) }}"
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: create ssl directory
+  file:
+    state: directory
+    path: /etc/nginx/ssl
+    owner: root
+    group: root
+    mode: 0600
+
+- name: deploy ssl files
+  copy:
+    src: "etc/nginx/ssl/{{ item }}"
+    dest: "/etc/nginx/ssl/{{ item }}"
+    mode: 0400
+  with_items:
+    - server.crt
+    - server.key
+    - dhparam.pem
+
+- name: remove default config file
+  file:
+    state: absent
+    path: /etc/nginx/conf.d/default.conf
+  notify: reload nginx
+
+- name: deploy config file
+  template:
+    src: etc/nginx/conf.d/app.conf.j2
+    dest: /etc/nginx/conf.d/app.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload nginx
+
+- name: start nginx
+  systemd:
+    name: nginx
+    state: started
+    enabled: yes

@@ -1,0 +1,10 @@
+---
+- name: set up the ACLs for all servers
+  hosts: all
+  become: no
+  gather_facts: no
+  vars_files:
+    - ../vars/proxy.yml
+  roles:
+    - role: roles/iptables
+      tags: iptables

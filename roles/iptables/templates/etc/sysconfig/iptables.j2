@@ -29,6 +29,9 @@
 # allow ports
 -A INPUT --protocol tcp --dport 22 -j ACCEPT
 -A INPUT --protocol udp --sport 53 -j ACCEPT
+{% for allow in allow_ports %}
+-A INPUT --protocol {{ allow.protocol }} --dport {{ allow.port }} -j ACCEPT
+{% endfor %}
 
 # reject others
 -A INPUT --protocol tcp -j REJECT --reject-with tcp-reset
