@@ -1,0 +1,55 @@
+---
+- name: create daemon user
+  user:
+    name: ansible-exercise
+    comment: "app user."
+    create_home: no
+    home: /opt/ansible-exercise
+    shell: /sbin/nologin
+
+- name: create app directory
+  file:
+    state: directory
+    path: /opt/ansible-exercise
+    owner: ansible-exercise
+    group: ansible-exercise
+    mode: 0755
+
+- name: install openjdk-8
+  yum:
+    name: java-1.8.0-openjdk
+  environment: "{{ proxy_env | default({}) }}"
+
+- name: deploy systemd file
+  copy:
+    src: etc/systemd/system/app.service
+    dest: /etc/systemd/system/app.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart app
+
+- name: deploy config file
+  template:
+    src: etc/sysconfig/app.j2
+    dest: /etc/sysconfig/app
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart app
+
+- name: deploy app file
+  copy:
+    src: opt/ansible-exercise/app.jar
+    dest: /opt/ansible-exercise/app.jar
+    owner: ansible-exercise
+    group: ansible-exercise
+    mode: 0644
+  notify: restart app
+
+- name: start app
+  systemd:
+    name: app
+    state: started
+    enabled: yes
+    daemon_reload: yes

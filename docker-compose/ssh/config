@@ -1,0 +1,16 @@
+# ALL
+Host *
+User root
+IdentityFile ~/.ssh/id_ecdsa
+
+Host db1
+HostName 192.0.2.10
+
+Host rp1
+HostName 192.0.2.11
+
+Host app1
+HostName 192.0.2.12
+
+Host app2
+HostName 192.0.2.13

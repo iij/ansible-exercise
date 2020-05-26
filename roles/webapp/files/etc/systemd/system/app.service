@@ -1,0 +1,15 @@
+[Unit]
+Description=Ansible Exercise Sample Application
+After=network.target
+
+[Service]
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+EnvironmentFile=/etc/sysconfig/app
+User=ansible-exercise
+Group=ansible-exercise
+WorkingDirectory=/opt/ansible-exercise
+ExecStart=/usr/bin/java $JAVA_OPTS -jar /opt/ansible-exercise/app.jar
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target

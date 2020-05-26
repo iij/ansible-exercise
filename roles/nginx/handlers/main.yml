@@ -1,0 +1,9 @@
+---
+- name: reboot machine
+  reboot:
+    reboot_timeout: 300
+
+- name: reload nginx
+  systemd:
+    name: nginx
+    state: reloaded

@@ -1,0 +1,7 @@
+---
+conf_rpm: mysql80-community-release-el7-3.noarch.rpm
+mysql_version: mysql56-community
+
+db_name: sample
+db_user: test
+db_password: password

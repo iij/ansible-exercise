@@ -1,0 +1,77 @@
+---
+version: "3.7"
+
+services:
+  ansible:
+    build:
+      context: .
+    networks:
+      vm_net:
+        ipv4_address: 192.0.2.2
+    volumes:
+      - ../:/ansible-exercise
+  db1:
+    build:
+      context: .
+      dockerfile: Dockerfile_vm
+      target: main
+    privileged: yes
+    expose:
+      - "3306"
+    networks:
+      vm_net:
+        ipv4_address: 192.0.2.10
+    volumes:
+      - ./resolv.conf:/etc/resolv.conf
+  rp1:
+    build:
+      context: .
+      dockerfile: Dockerfile_vm
+      target: main
+    privileged: yes
+    expose:
+      - "8443"
+    ports:
+      - "8443:8443"
+    networks:
+      vm_net:
+        ipv4_address: 192.0.2.11
+    volumes:
+      - ./resolv.conf:/etc/resolv.conf
+  app1:
+    build:
+      context: .
+      dockerfile: Dockerfile_vm
+      target: main
+    privileged: yes
+    expose:
+      - "80"
+      - "8080"
+    ports:
+      - "8080:8080"
+    networks:
+      vm_net:
+        ipv4_address: 192.0.2.12
+    volumes:
+      - ./resolv.conf:/etc/resolv.conf
+  app2:
+    build:
+      context: .
+      dockerfile: Dockerfile_vm
+      target: main
+    privileged: yes
+    expose:
+      - "80"
+      - "8080"
+    networks:
+      vm_net:
+        ipv4_address: 192.0.2.13
+    volumes:
+      - ./resolv.conf:/etc/resolv.conf
+
+networks:
+  vm_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.0.2.0/24

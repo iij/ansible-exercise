@@ -1,0 +1,39 @@
+---
+- name: download configure rpm
+  get_url:
+    url: "https://dev.mysql.com/get/{{ conf_rpm }}"
+    dest: /tmp
+  environment: "{{ proxy_env | default({}) }}"
+
+- name: install configure rpm
+  yum:
+    name: "/tmp/{{ conf_rpm }}"
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: install mysql
+  yum:
+    name: mysql-community-server
+    disablerepo: "mysql*"
+    enablerepo: "{{ mysql_version }}"
+    state: present
+  environment: "{{ proxy_env | default({}) }}"
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: deploy config file
+  copy:
+    src: etc/my.cnf
+    dest: /etc/my.cnf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart mysql
+
+- name: start mysql
+  systemd:
+    name: mysql
+    state: started
+    enabled: yes
+
+- name: import initialize tasks
+  import_tasks: init.yml
+  tags: init

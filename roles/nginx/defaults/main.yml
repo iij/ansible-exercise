@@ -1,0 +1,8 @@
+---
+nginx_version: 1.16.1
+
+nginx_https_port: 443
+
+nginx_backends:
+  - host: localhost
+    port: 80

@@ -1,0 +1,35 @@
+# base image
+# ---------------------------------------------------------
+FROM centos:7 as base
+
+WORKDIR /root/.ssh
+
+RUN set -x \
+    && yum install -y openssh-server sudo \
+    && rm -rf /var/cache/yum/* \
+    && yum clean all \
+    && systemctl enable sshd.service
+
+COPY ssh/id_ecdsa.pub ./authorized_keys
+
+RUN set -x \
+    && chmod 600 authorized_keys
+
+# main image
+# ---------------------------------------------------------
+FROM base as main
+
+EXPOSE 22
+
+CMD [ "/usr/sbin/init" ]
+
+# develop image
+# ---------------------------------------------------------
+FROM base as dev
+
+RUN set -x \
+    && yum install -y iproute traceroute telnet tcpdump bind-utils
+
+EXPOSE 22
+
+CMD [ "/usr/sbin/init" ]
