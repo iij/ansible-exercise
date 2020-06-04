@@ -4,7 +4,7 @@ WORKDIR /ansible-exercise
 
 ENV ANSIBLE_CONFIG=/ansible-exercise/ansible.cfg
 
-RUN set -x \
+RUN set -ex \
     && apt-get update \
     && apt-get install openssh-client git vim emacs -y \
     && apt-get clean \
@@ -13,7 +13,7 @@ RUN set -x \
 
 COPY ssh/config ssh/id_ecdsa /root/.ssh/
 
-RUN set -x \
+RUN set -ex \
     && chmod 700 /root/.ssh \
     && chmod 600 /root/.ssh/*
 
