@@ -11,7 +11,7 @@ git clone https://github.com/iij/ansible-exercise.git
 ## Overview
 
 この教材は、ハンズオン形式でAnsibleの使い方について学べるものです。
-ハンズオンを実施するにあたって、幾つかの環境整備が必要です。
+ハンズオンを実施するにあたって、いくつかの環境整備が必要です。
 下記内容に従って環境を整えましょう。
 
 所要時間: 10min - 30min
@@ -27,7 +27,7 @@ git clone https://github.com/iij/ansible-exercise.git
 ## Caution
 
 このハンズオンを実施する際にはVPN接続を切っておきましょう。
-VPN接続をしたままこのハンズオンを実施すると、正常に動作しないので注意して下さい。
+VPN接続をしたままハンズオンを実施すると、正常に動作しないので注意して下さい。
 
 プロキシ配下でこのハンズオンを実施する場合、`vars/proxy.yml`にプロキシ情報を**IPアドレス**で記載してから実施して下さい。
 
@@ -53,7 +53,7 @@ proxy_env:
 具体的には、Ansibleの入ったコンテナとCentOS7のコンテナを使用します。
 したがって、ハンズオンを実施するPCへDockerをインストールする必要があります。
 
-インストールしていない方は[こちら]()を参考にしてインストールしておきましょう。
+インストールしていない方は[こちら](https://iij.github.io/bootcamp/init/hello-bootcamp/)を参考にしてインストールしておきましょう。
 
 ### Docker-Compose
 
@@ -77,7 +77,7 @@ Stack Overflow 2019 Developer Surveyでは、vscodeが最も人気のある開�
 #### Remote - Containers
 
 vscodeにはコンテナ内でソースコードを編集できるようにする拡張機能として`Remote - Containers`というものがあります。
-このハンズオンではコンテナ内に入ってファイルを編集したり、コマンドを実行したりするので、
+このハンズオンではコンテナ内に入ってファイルを編集したり、コマンドを実行したりします。
 vscodeを使ってこのハンズオンを実施する場合は、この拡張機能を使用すると良いでしょう。
 
 [こちら](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)を参考にインストールしておきましょう。
