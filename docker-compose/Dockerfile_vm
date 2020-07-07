@@ -9,7 +9,7 @@ RUN set -ex \
     && rm -rf /var/cache/yum/* \
     && yum clean all \
     && sed -i -e 's/#UseDNS/UseDNS/g' /etc/ssh/sshd_config \
-    && systemctl enable sshd.service \
+    && systemctl enable sshd.service
 
 COPY ssh/id_ecdsa.pub ./authorized_keys
 
