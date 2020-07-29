@@ -29,14 +29,14 @@ git clone https://github.com/iij/ansible-exercise.git
 このハンズオンを実施する際にはVPN接続を切っておきましょう。
 VPN接続をしたままハンズオンを実施すると、正常に動作しないので注意して下さい。
 
-プロキシ配下でこのハンズオンを実施する場合、`vars/proxy.yml`にプロキシ情報を**IPアドレス**で記載してから実施して下さい。
+プロキシ配下でこのハンズオンを実施する場合、`vars/proxy.yml`にプロキシ情報を記載してから実施して下さい。
 
 例
 
 ```yml
 ---
 proxy_env:
-  http_proxy: http://198.51.100.10:8080
+  http_proxy: http://hoge.proxy.com:8080
   https_proxy: https://198.51.100.10
 ```
 
