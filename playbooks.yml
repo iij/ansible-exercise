@@ -1,0 +1,5 @@
+---
+- hosts: exercise
+
+  tasks:
+  - ping:
