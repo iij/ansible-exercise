@@ -1,0 +1,43 @@
+---
+- name: install mariadb
+  yum:
+    name:
+      - mariadb-server
+      - python3-PyMySQL
+    state: latest
+- name: deploy config file
+  copy:
+    src: etc/my.cnf
+    dest: /etc/my.cnf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart mariadb
+
+- name: start mariadb
+  service:
+    name: mariadb
+    enabled: true
+    state: started
+
+- name: mysql_root_password
+  mysql_user:
+    login_user: root
+    login_password: "{{ db_password }}"
+    user: root
+    check_implicit_admin: true
+    password: "{{ db_password }}"
+    host: localhost
+
+- name: remove remote root
+  mysql_user:
+    check_implicit_admin: true
+    login_user: root
+    login_password: "{{ db_password }}"
+    user: root
+    # host: "{{ ansible_fqdn }}"
+    state: absent
+
+- name: import initialize tasks
+  import_tasks: init.yml
+  tags: init

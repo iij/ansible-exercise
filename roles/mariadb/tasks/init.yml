@@ -1,0 +1,28 @@
+---
+# - name: install MySQL-python
+#   yum:
+#     name: MySQL-python
+#   environment: "{{ proxy_env | default({}) }}"
+
+- block:
+  - name: create database
+    mysql_db:
+      name: "{{ db_name }}"
+
+  # - name: removes anonymous user account
+  #   mysql_user:
+  #     login_user: root
+  #     name: ''
+  #     host_all: yes
+  #     state: absent
+
+  - name: create database user account
+    mysql_user:
+      login_user: root
+      name: "{{ db_user }}"
+      password: "{{ db_password }}"
+      host: "192.0.2.%"
+      priv: "{{ db_name }}.*:ALL"
+      state: present
+
+  ignore_errors: "{{ ansible_check_mode }}"
