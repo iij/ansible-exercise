@@ -6,17 +6,16 @@
   environment: "{{ proxy_env | default({}) }}"
 
 - name: add Nginx repository
-  yum_repository:
-    name: nginx-stable
-    description: 'nginx stable repo'
-    baseurl: http://nginx.org/packages/centos/$releasever/$basearch/
-    gpgkey: https://nginx.org/keys/nginx_signing.key
-    enabled: yes
+  copy:
+    src: "etc/yum.repos.d/nginx.repo"
+    dest: "/etc/yum.repos.d/nginx.repo"
+    mode: 0644
 
 - name: install Nginx
   yum:
-    name: "nginx-{{ nginx_version }}-1.el7.ngx.x86_64"
+    name: "nginx-{{ nginx_version }}-1.el8.ngx.x86_64"
     state: present
+    disablerepo: Appstream 
   environment: "{{ proxy_env | default({}) }}"
   ignore_errors: "{{ ansible_check_mode }}"
 

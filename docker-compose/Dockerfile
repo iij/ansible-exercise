@@ -6,7 +6,7 @@ ENV ANSIBLE_CONFIG=/ansible-exercise/ansible.cfg
 
 RUN set -x \
     && apt-get update \
-    && apt-get install openssh-client git vim emacs -y \
+    && apt-get install iputils-ping openssh-client git vim emacs -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && pip install --no-cache-dir ansible
