@@ -5,6 +5,8 @@
       - mariadb-server
       - python3-PyMySQL
     state: latest
+  environment: "{{ proxy_env | default({}) }}"
+
 - name: deploy config file
   copy:
     src: etc/my.cnf
