@@ -1,6 +1,6 @@
 # base image
 # ---------------------------------------------------------
-FROM centos:7 as base
+FROM  rockylinux:8 as base
 
 WORKDIR /root/.ssh
 

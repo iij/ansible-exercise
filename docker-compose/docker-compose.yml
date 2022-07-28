@@ -10,12 +10,39 @@ services:
         ipv4_address: 192.0.2.2
     volumes:
       - ../:/ansible-exercise
-  db1:
+  host000:
     build:
       context: .
       dockerfile: Dockerfile_vm
       target: main
     privileged: yes
+    networks:
+      vm_net:
+        ipv4_address: 192.0.2.100
+  host001:
+    build:
+      context: .
+      dockerfile: Dockerfile_vm
+      target: main
+    privileged: yes
+    networks:
+      vm_net:
+        ipv4_address: 192.0.2.101
+  host002:
+    build:
+      context: .
+      dockerfile: Dockerfile_vm
+      target: main
+    privileged: yes
+    networks:
+      vm_net:
+        ipv4_address: 192.0.2.102
+  db1:
+    build:
+      context: .
+      dockerfile: Dockerfile_vm
+      target: main
+    privileged: true
     expose:
       - "3306"
     networks:
@@ -26,7 +53,7 @@ services:
       context: .
       dockerfile: Dockerfile_vm
       target: main
-    privileged: yes
+    privileged: true
     expose:
       - "8443"
     ports:
@@ -39,7 +66,7 @@ services:
       context: .
       dockerfile: Dockerfile_vm
       target: main
-    privileged: yes
+    privileged: true
     expose:
       - "80"
       - "8080"
@@ -53,7 +80,7 @@ services:
       context: .
       dockerfile: Dockerfile_vm
       target: main
-    privileged: yes
+    privileged: true
     expose:
       - "80"
       - "8080"
