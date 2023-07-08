@@ -1,4 +1,8 @@
 FROM python:3.8-slim
+# ENV HTTP_PROXY=http://proxy.example.jp:8080
+# ENV HTTPS_PROXY=http://proxy.example.jp:8080
+# ENV http_proxy=http://proxy.example.jp:8080
+# ENV https_proxy=http://proxy.example.jp:8080
 
 WORKDIR /ansible-exercise
 
@@ -6,7 +10,7 @@ ENV ANSIBLE_CONFIG=/ansible-exercise/ansible.cfg
 
 RUN set -ex \
     && apt-get update \
-    && apt-get install openssh-client git vim emacs -y \
+    && apt-get install iputils-ping openssh-client git vim emacs -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && pip install --no-cache-dir ansible

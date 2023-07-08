@@ -6,5 +6,5 @@
   vars_files:
     - ../vars/proxy.yml
   roles:
-    - role: roles/mysql
+    - role: roles/mariadb
       tags: mysql
