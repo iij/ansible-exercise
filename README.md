@@ -1,69 +1,123 @@
-# Ansible Exercise
-
-IIJ Bootcamp のAnsibleの講義用教材です。
-
-参加者の方々は以下のコマンドを実行してこのレポジトリをローカルにダウンロードしておいて下さい。
-
-```sh
-git clone https://github.com/iij/ansible-exercise.git
-```
+# Ansible Hands-On Materials
 
 ## Overview
 
-この教材は、ハンズオン形式でAnsibleの使い方について学べるものです。
-ハンズオンを実施するにあたって、いくつかの環境整備が必要です。
-下記内容に従って環境を整えましょう。
-
-所要時間: 10min - 30min
-
-### Index
-
-- [Caution](#caution)
-- [Requirements](#requirements)
-- [Recommended](#recommended)
-- [Test](#test)
-- [Contact](#contact)
-
-## Caution
-
-このハンズオンを実施する際にはVPN接続を切っておきましょう。
-VPN接続をしたままハンズオンを実施すると、正常に動作しないので注意して下さい。
-
-プロキシ配下でこのハンズオンを実施する場合、`vars/proxy.yml`にプロキシ情報を記載してから実施して下さい。
-
-例
-
-```yml
----
-proxy_env:
-  http_proxy: http://hoge.proxy.com:8080
-  https_proxy: https://198.51.100.10
-```
+IIJ Bootcamp のAnsibleの講義用教材です。
+IIJ Bootcamp における Ansibleの項ではこちらで示す環境を前提に演習を行うため、参加者の方々は以下の作業を実施し、必要な環境を揃えてください。
 
 ## Requirements
 
-このハンズオンを実施する上での必須ツールのセッティング方法になります。
+このハンズオンを実施する上では、以下のセットアップが前提となっています
 
-### Docker
+- git
+- Docker
+- Docker Compose
 
-このハンズオンではDockerコンテナ(以下、コンテナ)をVMに見立てて使用します。
-具体的には、Ansibleの入ったコンテナとCentOS7のコンテナを使用します。
-したがって、ハンズオンを実施するPCへDockerをインストールする必要があります。
+## Caution
 
-インストールしていない方は[こちら](https://iij.github.io/bootcamp/init/hello-bootcamp/)を参考にしてインストールしておきましょう。
+このハンズオンの実行では、以下のような問題点があります。
+演習の為に敢えて設定していますが、本来は好ましい設定ではないため、本番環境では適切な設定を行ってください
 
-### Docker-Compose
+- rootユーザによるsshログインを許可している
+- rootパスワードが安直な文字列になっている
 
-このハンズオンではVMに見立てるコンテナをDocker-Composeを用いて起動します。
-[公式サイト](https://docs.docker.com/compose/install/)を参考にインストールしておきましょう。
-`Docker Desktop for Windows(Mac)`をインストールした人は既にインストールされています。
+## TO DO
+
+それでは演習に必要な環境のセットアップを行います。
+以下の一連の作業を実施すると図に示したような環境が構築されます。
+
+1. Hands-On Materialのダウンロード
+   ```sh
+   git clone https://github.com/iij/ansible-exercise.git
+   ```
+
+2. コンテナインフラ環境のセットアップ
+
+   ディレクトリの移動
+   ```bash
+    cd ansible-exercise
+   ```
+
+   コンテナのセットアップ
+   ```bash
+    docker compose up -d
+   ```
+
+3. コンソール端末における最低限のパッケージインストール
+
+   コンテナログイン
+   ```bash
+    docker exec -it iijbootcamp_ansible_console bash
+   ```
+   ping コマンドを含むパッケージのインストール
+   ```bash
+    dnf install -y iputils
+   ```
+   ip コマンドを含むパッケージのインストール
+   ```bash
+    dnf install -y iproute
+   ```
+   ssh クライアントのインストール
+   ```bash
+    dnf install -y openssh-clients
+   ```
+   コンテナからのログアウト
+   ```bash
+    exit
+   ```
+
+4. 操作される側の端末へのopenssh-server インストール
+   コンテナログイン
+   ```bash
+    docker exec -it <対象のコンテナ> bash
+   ```
+   ssh server のインストール
+   ```bash
+    dnf install -y openssh-server
+   ```
+   root のパスワードログイン許可
+   ```bash
+   echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+   ```
+   ssh server の起動
+   ```bash
+   systemctl enable sshd
+   systemctl start sshd
+   ```
+   root passwordの設定(ansible)とする
+   ```bash
+   passwd
+   ```
+
+- <対象のコンテナ>は以下の通り
+  -  iijbootcamp_ansible_host00
+  -  iijbootcamp_ansible_host01
+  -  iijbootcamp_ansible_web00
+  -  iijbootcamp_ansible_app00
+
+5. 動作確認
+   ```bash
+    docker exec -it iijbootcamp_ansible_console bash
+   ```
+   ```bash
+    ping <対象のコンテナ>
+   ```
+   ```bash
+    ssh <対象のコンテナ>
+   ```
+
+- <対象のコンテナ>は以下の通り
+  -  iijbootcamp_ansible_host00
+  -  iijbootcamp_ansible_host01
+  -  iijbootcamp_ansible_web00
+  -  iijbootcamp_ansible_app00
 
 ## Recommended
 
 このハンズオンでの推奨環境として`Visual Studio Code`(以下、vscode)を指定します。
 ソースコードエディタや開発環境に特にこだわりがない人は、以下の環境を整えておくとスムーズにハンズオンを進めることができます。
 
-### VScode
+### VScode + Ansible Extension
 
 vscodeとはマイクロソフトが開発したオープンソースのソースコードエディタです。
 拡張機能(extension)をインストールすることで様々な言語のソースコードを効率よく編集することができます。
@@ -71,111 +125,9 @@ Stack Overflow 2019 Developer Surveyでは、vscodeが最も人気のある開�
 
 [公式サイト](https://code.visualstudio.com/)から環境に合わせてインストールしましょう。
 
-#### Remote - Containers
+#### Ansible Extension
 
-vscodeにはコンテナ内でソースコードを編集できるようにする拡張機能として`Remote - Containers`というものがあります。
-このハンズオンではコンテナ内に入ってファイルを編集したり、コマンドを実行したりします。
-vscodeを使ってこのハンズオンを実施する場合は、この拡張機能を使用すると良いでしょう。
+vscodeにはRed Hat社よりAnsibleのplaybookを書く為に公式のExtensionが提供されています。
+補完や構文チェックなどの機能が備わっているため、可能な限り使うようにしましょう
 
-[こちら](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)を参考にインストールしておきましょう。
-
-#### Japanese Language Pack
-
-vscodeの表示言語は英語です。
-日本語化したい人は以下の拡張機能をインストールすると良いでしょう。
-
-<https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja>
-
-## Test
-
-上記の環境準備が整ったら、テストをしておきましょう。
-
-### vscode
-
-vscodeを開き`Ctrl(Command)+Shift+p`でコマンドパレットを開いたら、`remote containers`と入力し、
-フィルターされたコマンドの中から`Open Folder in Container...`を選択します。
-フォルダの選択画面が表示されたら、ダウンロードしたこのフォルダを選択し、コンテナを起動します。
-
-しばらく待つとエディタが開きますので、`terminal(ターミナル)`を選択して下記のコマンドをコンテナ内で実行します。
-
-```sh
-ansible -m ping db1
-```
-
-以下の出力が確認できれば成功です。
-
-```txt
-db1 | SUCCESS => {
-    "ansible_facts": {
-        "discovered_interpreter_python": "/usr/bin/python"
-    },
-    "changed": false,
-    "ping": "pong"
-}
-```
-
-vscodeを閉じるとコンテナも停止します。
-
-以上でテスト完了です。
-
-### other
-
-ダウンロードしたこのフォルダ内で、下記コマンドをシェル上で実行してコンテナを起動します。
-
-Windows
-
-```powershell
-docker-compose -f docker-compose\docker-compose.yml up -d
-```
-
-Mac/Linux
-
-```sh
-docker-compose -f docker-compose/docker-compose.yml up -d
-```
-
-エラーなくコマンドが終了すれば成功です。
-次に下記コマンドを実行し、コンテナの中に入ります。
-
-```sh
-docker exec -it docker-compose_ansible_1 bash
-```
-
-エラーなくコンテナ内に入れたら下記コマンドを実行します。
-
-```sh
-ansible -m ping db1
-```
-
-以下の出力が確認できれば成功です。
-
-```txt
-db1 | SUCCESS => {
-    "ansible_facts": {
-        "discovered_interpreter_python": "/usr/bin/python"
-    },
-    "changed": false,
-    "ping": "pong"
-}
-```
-
-最後に、コンテナを停止しておきましょう。
-コンテナから`exit`または`Ctrl(Command)+d`で抜けてから、下記コマンドを実行します。
-
-Windows
-
-```powershell
-docker-compose -f docker-compose\docker-compose.yml stop
-```
-
-Mac/Linux
-
-```sh
-docker-compose -f docker-compose/docker-compose.yml stop
-```
-
-以上でテスト完了です。
-
-## Contact
-
-上記準備でお困りの際は、周りの先輩に相談するか、Teamsやメールで`mafuyu-soga`までご相談下さい。
+[公式サイト](https://marketplace.visualstudio.com/items?itemName=redhat.ansible)

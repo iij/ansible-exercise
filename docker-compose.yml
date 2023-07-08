@@ -1,0 +1,57 @@
+---
+version: "3.7"
+services:
+  console:
+    image: registry.access.redhat.com/ubi9-init:9.2-8
+    container_name: "iijbootcamp_ansible_console"
+    working_dir: /ansible
+    privileged: true
+    tty: true
+    networks:
+      vm_net:
+        ipv4_address: 192.0.2.2
+    volumes:
+      - ./ansible:/ansible
+  host00:
+    image: registry.access.redhat.com/ubi9-init:9.2-8
+    container_name: "iijbootcamp_ansible_host00"
+    privileged: true
+    tty: true
+    networks:
+      vm_net:
+        ipv4_address: 192.0.2.100
+  host01:
+    image: registry.access.redhat.com/ubi9-init:9.2-8
+    container_name: "iijbootcamp_ansible_host01"
+    privileged: true
+    tty: true
+    networks:
+      vm_net:
+        ipv4_address: 192.0.2.101
+  web00:
+    image: registry.access.redhat.com/ubi9-init:9.2-8
+    container_name: "iijbootcamp_ansible_web00"
+    privileged: true
+    tty: true
+    ports:
+      - "18080:80"
+    networks:
+      vm_net:
+        ipv4_address: 192.0.2.10
+  app00:
+    image: registry.access.redhat.com/ubi9-init:9.2-8
+    container_name: "iijbootcamp_ansible_app00"
+    privileged: true
+    tty: true
+    expose:
+      - "8080"
+    networks:
+      vm_net:
+        ipv4_address: 192.0.2.11
+
+networks:
+  vm_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.0.2.0/24
