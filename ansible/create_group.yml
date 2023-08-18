@@ -1,0 +1,19 @@
+---
+- name: "演習.4 ユーザ・グループを作成するplaybookを作る"
+  hosts: exercise
+  gather_facts: false
+  environment:
+    http_proxy: "http://proxy.example.jp:8080"
+    https_proxy: "http://proxy.example.jp:8080"
+  tasks:
+    - name: "ユーザグループを作成する"
+      ansible.builtin.group:
+        name: "bootcamp"
+        gid: 1750
+        state: present
+
+    - name: "ユーザを作成する"
+      ansible.builtin.user:
+        name: "bootcampuser"
+        uid: 4000
+        state: present
