@@ -1,0 +1,33 @@
+---
+- name: "演習.5 ユーザ・グループを作成するplaybookを作る"
+  hosts: exercise
+  gather_facts: false
+  environment:
+    http_proxy: "http://proxy.example.jp:8080"
+    https_proxy: "http://proxy.example.jp:8080"
+  tasks:
+    - name: グループ 'bootcamp' の情報を取得
+      ansible.builtin.command: getent group bootcamp
+      register: bootcamp_group
+      ignore_errors: true
+      changed_when: false
+
+    - name: ユーザ 'bootcampuser' の情報を取得
+      ansible.builtin.command: getent passwd bootcampuser
+      register: bootcampuser_user
+      ignore_errors: true
+      changed_when: false
+
+    - name: グループ 'bootcamp' が存在し、GID 1750 を持っているか確認
+      ansible.builtin.assert:
+        that:
+          - "bootcamp_group.rc == 0"
+          - "bootcamp_group.stdout.split(':')[2] == '1750'"
+        fail_msg: "'bootcamp' グループが GID 1750 を持っていません。"
+
+    - name: ユーザ 'bootcampuser' が存在し、UID 4000 を持っているか確認
+      ansible.builtin.assert:
+        that:
+          - "bootcampuser_user.rc == 0"
+          - "bootcampuser_user.stdout.split(':')[2] == '4000'"
+        fail_msg: "'bootcampuser' ユーザが UID 4000 を持っていません。"

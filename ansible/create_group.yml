@@ -1,5 +1,5 @@
 ---
-- name: "演習.4 ユーザ・グループを作成するplaybookを作る"
+- name: "演習.5 ユーザ・グループを作成するplaybookを作る"
   hosts: exercise
   gather_facts: false
   environment:
