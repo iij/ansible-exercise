@@ -1,13 +1,6 @@
-[exercise]
-host000
-host001
-host002
 
-[app]
-app1
+[web]
+web00
 
-[db]
-db1
-
-[rp]
-rp1
+[ap]
+ap00

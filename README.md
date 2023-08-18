@@ -59,7 +59,7 @@ IIJ Bootcamp における Ansibleの項ではこちらで示す環境を前提�
    ```
    ssh クライアントのインストール
    ```bash
-    dnf install -y openssh-clients
+    dnf install -y openssh-clients sshpass
    ```
    コンテナからのログアウト
    ```bash
