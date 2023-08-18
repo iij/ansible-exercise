@@ -1,5 +1,5 @@
 ---
 - hosts: exercise
-
+  gather_facts: false
   tasks:
   - ping:
