@@ -117,7 +117,7 @@ IIJ Bootcamp における Ansibleの項ではこちらで示す環境を前提�
 このハンズオンでの推奨環境として`Visual Studio Code`(以下、vscode)を指定します。
 ソースコードエディタや開発環境に特にこだわりがない人は、以下の環境を整えておくとスムーズにハンズオンを進めることができます。
 
-### VScode + Ansible Extension
+### vscode
 
 vscodeとはマイクロソフトが開発したオープンソースのソースコードエディタです。
 拡張機能(extension)をインストールすることで様々な言語のソースコードを効率よく編集することができます。
@@ -131,3 +131,4 @@ vscodeにはRed Hat社よりAnsibleのplaybookを書く為に公式のExtension�
 補完や構文チェックなどの機能が備わっているため、可能な限り使うようにしましょう
 
 [公式サイト](https://marketplace.visualstudio.com/items?itemName=redhat.ansible)
+
