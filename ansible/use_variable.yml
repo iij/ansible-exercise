@@ -1,0 +1,19 @@
+---
+- name: "演習.6 変数とループの活用"
+  hosts: exercise
+  gather_facts: true
+  vars_files:
+    - "./vars/user.yml"
+  tasks:
+    - name: "ユーザを作成する"
+      ansible.builtin.user:
+        name: "{{ user }}"
+        uid: 5000
+        state: present
+
+    - name: "ループで作成する"
+      ansible.builtin.user:
+        name: "{{ user }}"
+        uid: 5000
+        state: present
+      loop:

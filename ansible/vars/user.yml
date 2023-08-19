@@ -1,0 +1,10 @@
+---
+user: bootcamp_uesr
+user_list:
+  - bootcamp01
+  - bootcamp02
+  - bootcamp03
+user_dict:
+  - { name: bootcamp11, uid: 5011 }
+  - { name: bootcamp12, uid: 5012 }
+  - { name: bootcamp13, uid: 5013 }
