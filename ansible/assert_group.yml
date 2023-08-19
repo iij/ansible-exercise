@@ -2,9 +2,6 @@
 - name: "演習.5 ユーザ・グループを作成するplaybookを作る"
   hosts: exercise
   gather_facts: false
-  environment:
-    http_proxy: "http://proxy.example.jp:8080"
-    https_proxy: "http://proxy.example.jp:8080"
   tasks:
     - name: グループ 'bootcamp' の情報を取得
       ansible.builtin.command: getent group bootcamp

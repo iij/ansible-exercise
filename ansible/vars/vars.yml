@@ -1,0 +1,7 @@
+---
+app_users:
+  - app_user01
+  - app_user02
+  - app_user03
+html_content:
+  - "Hello bootcamp"

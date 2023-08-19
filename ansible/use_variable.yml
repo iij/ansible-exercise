@@ -1,19 +1,37 @@
 ---
 - name: "演習.6 変数とループの活用"
-  hosts: exercise
+  hosts: web
   gather_facts: true
+  vars:
+    web_user: web_user00
+    packages:
+      - httpd
   vars_files:
-    - "./vars/user.yml"
+    - vars/vars.yml
   tasks:
-    - name: "ユーザを作成する"
+    - name: "変数を使ってユーザを作成する"
       ansible.builtin.user:
-        name: "{{ user }}"
-        uid: 5000
+        name: "{{ web_user }}"
         state: present
 
-    - name: "ループで作成する"
+    - name: "変数ファイルを読み込み、ループしながらユーザを作成する"
       ansible.builtin.user:
-        name: "{{ user }}"
-        uid: 5000
+        name: "{{ item }}"
         state: present
-      loop:
+      loop: "{{ app_users }}"
+
+    - name: "パッケージをインストールする"
+      ansible.builtin.package:
+        name: "{{ packages }}"
+        state: latest
+
+    - name: "サービス(httpd)の起動"
+      ansible.builtin.systemd:
+        name: httpd
+        state: started
+        enabled: true
+
+    - name: "HTML コンテンツ index.htmlファイルの作成"
+      ansible.builtin.copy:
+        content: "{{ html_content }}"
+        dest: /var/www/html/index.html
