@@ -1,6 +1,0 @@
----
-# データベースサーバを構築する playbook
-- import_playbook: playbooks/db.yml
-
-# アプリケーションサーバを構築する playbook
-- import_playbook: playbooks/app.yml
