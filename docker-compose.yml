@@ -2,7 +2,7 @@
 version: "3.7"
 services:
   console:
-    image: registry.access.redhat.com/ubi9-init:9.2-8
+    image: ghcr.io/ainamori-iij/iijbootcamp_ansible_console 
     container_name: "iijbootcamp_ansible_console"
     working_dir: /ansible
     privileged: true
@@ -13,7 +13,7 @@ services:
     volumes:
       - ./ansible:/ansible
   host00:
-    image: registry.access.redhat.com/ubi9-init:9.2-8
+    image: ghcr.io/ainamori-iij/iijbootcamp_ansible_host 
     container_name: "iijbootcamp_ansible_host00"
     privileged: true
     tty: true
@@ -21,7 +21,7 @@ services:
       vm_net:
         ipv4_address: 192.0.2.100
   host01:
-    image: registry.access.redhat.com/ubi9-init:9.2-8
+    image: ghcr.io/ainamori-iij/iijbootcamp_ansible_host 
     container_name: "iijbootcamp_ansible_host01"
     privileged: true
     tty: true
@@ -29,7 +29,7 @@ services:
       vm_net:
         ipv4_address: 192.0.2.101
   web00:
-    image: registry.access.redhat.com/ubi9-init:9.2-8
+    image: ghcr.io/ainamori-iij/iijbootcamp_ansible_host 
     container_name: "iijbootcamp_ansible_web00"
     privileged: true
     tty: true
@@ -39,7 +39,7 @@ services:
       vm_net:
         ipv4_address: 192.0.2.10
   app00:
-    image: registry.access.redhat.com/ubi9-init:9.2-8
+    image: ghcr.io/ainamori-iij/iijbootcamp_ansible_host 
     container_name: "iijbootcamp_ansible_app00"
     privileged: true
     tty: true
