@@ -4,6 +4,7 @@ services:
   console:
     image: ghcr.io/ainamori-iij/iijbootcamp_ansible_console 
     container_name: "iijbootcamp_ansible_console"
+    hostname: ansible_console
     working_dir: /ansible
     privileged: true
     tty: true
@@ -15,6 +16,7 @@ services:
   host00:
     image: ghcr.io/ainamori-iij/iijbootcamp_ansible_host 
     container_name: "iijbootcamp_ansible_host00"
+    hostname: ansible_host00
     privileged: true
     tty: true
     networks:
@@ -23,6 +25,7 @@ services:
   host01:
     image: ghcr.io/ainamori-iij/iijbootcamp_ansible_host 
     container_name: "iijbootcamp_ansible_host01"
+    hostname: ansible_host01
     privileged: true
     tty: true
     networks:
@@ -31,6 +34,7 @@ services:
   web00:
     image: ghcr.io/ainamori-iij/iijbootcamp_ansible_host 
     container_name: "iijbootcamp_ansible_web00"
+    hostname: ansible_web00
     privileged: true
     tty: true
     ports:
@@ -41,6 +45,7 @@ services:
   app00:
     image: ghcr.io/ainamori-iij/iijbootcamp_ansible_host 
     container_name: "iijbootcamp_ansible_app00"
+    hostname: ansible_app00
     privileged: true
     tty: true
     expose:
