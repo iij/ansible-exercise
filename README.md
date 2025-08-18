@@ -66,36 +66,7 @@ IIJ Bootcamp における Ansibleの項ではこちらで示す環境を前提�
     exit
    ```
 
-4. 操作される側の端末へのopenssh-server インストール
-   コンテナログイン
-   ```bash
-    docker exec -it <対象のコンテナ> bash
-   ```
-   ssh server のインストール
-   ```bash
-    dnf install -y openssh-server
-   ```
-   root のパスワードログイン許可
-   ```bash
-   echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
-   ```
-   ssh server の起動
-   ```bash
-   systemctl enable sshd
-   systemctl start sshd
-   ```
-   root passwordの設定(ansible)とする
-   ```bash
-   passwd
-   ```
-
-- <対象のコンテナ>は以下の通り
-  -  iijbootcamp_ansible_host00
-  -  iijbootcamp_ansible_host01
-  -  iijbootcamp_ansible_web00
-  -  iijbootcamp_ansible_app00
-
-5. 動作確認
+4. 動作確認
    ```bash
     docker exec -it iijbootcamp_ansible_console bash
    ```
@@ -105,6 +76,17 @@ IIJ Bootcamp における Ansibleの項ではこちらで示す環境を前提�
    ```bash
     ssh <対象のコンテナ>
    ```
+   - 以下のように鍵の確認だけ聞かれるがyesを押せば良い
+     ```
+     [root@console ansible]# ssh iijbootcamp_ansible_host00
+      The authenticity of host 'iijbootcamp_ansible_host00 (192.0.2.100)' can't be established.
+      ED25519 key fingerprint is SHA256:YLg5ewQEdkmSm8wKvQ753fNiocqiclGi+DqlsNNAVVA.
+      This host key is known by the following other names/addresses:
+         ~/.ssh/known_hosts:1: host00
+      Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+      Warning: Permanently added 'iijbootcamp_ansible_host00' (ED25519) to the list of known hosts.
+     ```
+   - ログインパスワードは"ansible"
 
 - <対象のコンテナ>は以下の通り
   -  iijbootcamp_ansible_host00
