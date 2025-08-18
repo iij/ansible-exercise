@@ -49,22 +49,6 @@ IIJ Bootcamp における Ansibleの項ではこちらで示す環境を前提�
    ```bash
     docker exec -it iijbootcamp_ansible_console bash
    ```
-   ping コマンドを含むパッケージのインストール
-   ```bash
-    dnf install -y iputils
-   ```
-   ip コマンドを含むパッケージのインストール
-   ```bash
-    dnf install -y iproute
-   ```
-   ssh クライアントのインストール
-   ```bash
-    dnf install -y openssh-clients sshpass
-   ```
-   コンテナからのログアウト
-   ```bash
-    exit
-   ```
 
 4. 動作確認
    ```bash
@@ -76,17 +60,9 @@ IIJ Bootcamp における Ansibleの項ではこちらで示す環境を前提�
    ```bash
     ssh <対象のコンテナ>
    ```
-   - 以下のように鍵の確認だけ聞かれるがyesを押せば良い
-     ```
-     [root@console ansible]# ssh iijbootcamp_ansible_host00
-      The authenticity of host 'iijbootcamp_ansible_host00 (192.0.2.100)' can't be established.
-      ED25519 key fingerprint is SHA256:YLg5ewQEdkmSm8wKvQ753fNiocqiclGi+DqlsNNAVVA.
-      This host key is known by the following other names/addresses:
-         ~/.ssh/known_hosts:1: host00
-      Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-      Warning: Permanently added 'iijbootcamp_ansible_host00' (ED25519) to the list of known hosts.
-     ```
+   - ssh の鍵登録でyes/noを聞かれるがyesでよい
    - ログインパスワードは"ansible"
+
 
 - <対象のコンテナ>は以下の通り
   -  iijbootcamp_ansible_host00
