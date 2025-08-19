@@ -1,5 +1,5 @@
 ---
-- hosts: exercise
-
+- name: "IIJ Bootcamp playbook"
+  hosts: exercise
   tasks:
-  - ping:
+    - ping:

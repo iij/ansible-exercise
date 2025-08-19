@@ -1,92 +1,89 @@
-# Ansible Hands-On Materials
+## Ansible Hands-On 講義資料
 
-## Overview
+### 概要
 
-IIJ Bootcamp のAnsibleの講義用教材です。
-IIJ Bootcamp における Ansibleの項ではこちらで示す環境を前提に演習を行うため、参加者の方々は以下の作業を実施し、必要な環境を揃えてください。
+本資料は IIJ Bootcamp Ansible 講義 の演習用教材です。
+講義におけるハンズオンは、本資料で示す環境を前提に進めます。
+参加者の方は以下の手順に従って環境を準備してください。
 
-## Requirements
 
-このハンズオンを実施する上では、以下のセットアップが前提となっています
+### 必要環境
+
+以下のソフトウェアがセットアップされていることが前提条件です。
 
 - git
 - Docker
 - Docker Compose
 
-## Caution
 
-このハンズオンの実行では、以下のような問題点があります。
-演習の為に敢えて設定していますが、本来は好ましい設定ではないため、本番環境では適切な設定を行ってください
+### 注意事項
 
-- rootユーザによるsshログインを許可している
-- rootパスワードが安直な文字列になっている
+このハンズオン環境は演習目的のため、本来は推奨されない設定が含まれています。
+本番環境で利用する際には必ず適切なセキュリティ設定を行ってください。
 
-## TO DO
-
-それでは演習に必要な環境のセットアップを行います。
-以下の一連の作業を実施すると図に示したような環境が構築されます。
-
-1. Hands-On Materialのダウンロード
-   ```sh
-   git clone https://github.com/iij/ansible-exercise.git
-   ```
-
-2. コンテナインフラ環境のセットアップ
-
-   ディレクトリの移動
-   ```bash
-    cd ansible-exercise
-   ```
-
-   コンテナのセットアップ
-   ```bash
-    docker compose up -d
-   ```
-
-3. コンソール端末における最低限のパッケージインストール
-
-   コンテナログイン
-   ```bash
-    docker exec -it iijbootcamp_ansible_console bash
-   ```
-
-4. 動作確認
-   ```bash
-    docker exec -it iijbootcamp_ansible_console bash
-   ```
-   ```bash
-    ping <対象のコンテナ>
-   ```
-   ```bash
-    ssh <対象のコンテナ>
-   ```
-   - ssh の鍵登録でyes/noを聞かれるがyesでよい
-   - ログインパスワードは"ansible"
+- root ユーザによる SSH ログインを許可 している
+- root パスワードが 簡易な文字列 になっている
 
 
-- <対象のコンテナ>は以下の通り
-  -  iijbootcamp_ansible_host00
-  -  iijbootcamp_ansible_host01
-  -  iijbootcamp_ansible_web00
-  -  iijbootcamp_ansible_app00
+### セットアップ手順
 
-## Recommended
+以下の手順を実行すると、図示されたコンテナ環境が構築されます。
+![構成図](./docs/images/network.drawio.png)
 
-このハンズオンでの推奨環境として`Visual Studio Code`(以下、vscode)を指定します。
-ソースコードエディタや開発環境に特にこだわりがない人は、以下の環境を整えておくとスムーズにハンズオンを進めることができます。
 
-### vscode
+#### Hands-On Material のダウンロード
 
-vscodeとはマイクロソフトが開発したオープンソースのソースコードエディタです。
-拡張機能(extension)をインストールすることで様々な言語のソースコードを効率よく編集することができます。
-Stack Overflow 2019 Developer Surveyでは、vscodeが最も人気のある開発者環境ツールとしてランクインしています。
+```bash
+git clone https://github.com/iij/ansible-exercise.git
+```
 
-[公式サイト](https://code.visualstudio.com/)から環境に合わせてインストールしましょう。
+#### コンテナ環境のセットアップ
+
+```bash
+cd ansible-exercise
+docker compose up -d
+```
+
+#### コンソール端末での基本セットアップ
+
+コンソールコンテナにログインします。
+
+```bash
+docker exec -it iijbootcamp_ansible_console bash
+```
+
+#### 動作確認
+
+```bash
+docker exec -it iijbootcamp_ansible_console bash
+```
+
+対象コンテナに対して疎通確認を行います。
+
+```bash
+ping <対象のコンテナ>
+```
+```bash
+ssh <対象のコンテナ>
+```
+- SSH の鍵登録で yes/no を聞かれた場合は yes を入力してください
+- ログインパスワードは ansible
+
+対象コンテナ一覧
+
+- iijbootcamp_ansible_host00
+- iijbootcamp_ansible_host01
+- iijbootcamp_ansible_web00
+- iijbootcamp_ansible_app00
+
+------------------------------------------------------------------------
+
+### 推奨開発環境
+
+本ハンズオンでは、開発環境として Visual Studio Code (VSCode)の利用を推奨します。
+特にこだわりがなければ VSCodeを利用することで、スムーズに演習を進められます。
 
 #### Ansible Extension
 
-vscodeにはRed Hat社よりAnsibleのplaybookを書く為に公式のExtensionが提供されています。
-補完や構文チェックなどの機能が備わっているため、可能な限り使うようにしましょう
-
-[公式サイト](https://marketplace.visualstudio.com/items?itemName=redhat.ansible)
+Red Hat 社が提供する公式拡張機能 Ansible Extension を利用すると、補完機能や構文チェックが利用でき、Playbook の記述が効率化されます。
 
