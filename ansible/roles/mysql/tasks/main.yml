@@ -29,10 +29,18 @@
   notify: restart mysql
 
 - name: start mysql
-  systemd:
-    name: mysql
+  service:
+    name: mysqld
     state: started
     enabled: yes
+
+- name: set root password
+  mysql_user:
+    login_user: root
+    check_implicit_admin: true
+    user: root
+    password: "{{ db_password }}"
+    host: localhost
 
 - name: import initialize tasks
   import_tasks: init.yml

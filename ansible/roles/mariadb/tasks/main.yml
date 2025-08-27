@@ -31,14 +31,8 @@
     password: "{{ db_password }}"
     host: localhost
 
-- name: remove remote root
-  mysql_user:
-    check_implicit_admin: true
-    login_user: root
-    login_password: "{{ db_password }}"
-    user: root
-    # host: "{{ ansible_fqdn }}"
-    state: absent
+# - name: remove remote root
+#   # This task is commented out because it could unintentionally remove root@localhost.
 
 - name: import initialize tasks
   import_tasks: init.yml
