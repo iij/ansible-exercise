@@ -9,12 +9,17 @@ IIJ Bootcamp における Ansibleの項ではこちらで示す環境を前提�
 
 このハンズオンを実施する上では、以下のセットアップが前提となっています
 
+- Ubuntu 24.04
+  - IIJ 社内における Bootcamp 実施時の推奨環境が Ubuntu となっているため
+  - これ以外での環境でも実施可能ですが、`/setup`下のスクリプトについては書き換えが必要です
 - git
-- Docker
-- Docker Compose
+  - 導入されていない場合は事前に `sudo apt install git` などでインストールしておいてください
+- lxd
+  - Ansible 適用先ターゲットノードとして使用します
 
 ## Caution
 
+<!-- TODO: この項目は不要かも -->
 このハンズオンの実行では、以下のような問題点があります。
 演習の為に敢えて設定していますが、本来は好ましい設定ではないため、本番環境では適切な設定を行ってください
 
@@ -28,47 +33,33 @@ IIJ Bootcamp における Ansibleの項ではこちらで示す環境を前提�
 
 1. Hands-On Materialのダウンロード
    ```sh
-   git clone https://github.com/iij/ansible-exercise.git
+   $ git clone https://github.com/iij/ansible-exercise.git
    ```
 
-2. コンテナインフラ環境のセットアップ
-
+1. LXD コンテナインフラ環境のセットアップ
    ディレクトリの移動
    ```bash
-    cd ansible-exercise
+   $ cd ansible-exercise
+    ## LXD のインストールとセットアップ
+   $ ./setup/setup_lxd.sh
+    ## LXD でのターゲットノードのセットアップ
+   $ ./setup/setup_target_nodes.sh
    ```
 
-   コンテナのセットアップ
+1. コンテナ動作確認
    ```bash
-    docker compose up -d
-   ```
-
-3. コンソール端末における最低限のパッケージインストール
-
-   コンテナログイン
-   ```bash
-    docker exec -it iijbootcamp_ansible_console bash
-   ```
-
-4. 動作確認
-   ```bash
-    docker exec -it iijbootcamp_ansible_console bash
+   $ sudo lxc exec host00 -- bash
+   ## root@host00:~# というプロンプトが表示されればOK
+   ## Ctrl + C で抜ける
    ```
    ```bash
-    ping <対象のコンテナ>
+   $ ping 10.200.10.100
+   ## 出力例
+   PING 10.200.10.101 (10.200.10.101) 56(84) bytes of data.
+   64 bytes from 10.200.10.101: icmp_seq=1 ttl=64 time=0.039 ms
+   64 bytes from 10.200.10.101: icmp_seq=2 ttl=64 time=0.053 ms
+   ^C
    ```
-   ```bash
-    ssh <対象のコンテナ>
-   ```
-   - ssh の鍵登録でyes/noを聞かれるがyesでよい
-   - ログインパスワードは"ansible"
-
-
-- <対象のコンテナ>は以下の通り
-  -  iijbootcamp_ansible_host00
-  -  iijbootcamp_ansible_host01
-  -  iijbootcamp_ansible_web00
-  -  iijbootcamp_ansible_app00
 
 ## Recommended
 
