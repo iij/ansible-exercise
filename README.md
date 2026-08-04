@@ -2,12 +2,13 @@
 
 ## Overview
 
-IIJ Bootcamp のAnsibleの講義用教材です。
-IIJ Bootcamp における Ansibleの項ではこちらで示す環境を前提に演習を行うため、参加者の方々は以下の作業を実施し、必要な環境を揃えてください。
+このリポジトリは、IIJ Bootcamp の講義「[Ansible による IT 自動化](https://iij.github.io/bootcamp/cicd_infra/ansible/)」講義用教材です。
+
+この講義では本リポジトリを使用して構築する環境を前提に演習を行うため、参加者の方々は以下の作業を実施し、必要な環境を揃えてください。
 
 ## Requirements
 
-このハンズオンを実施する上では、以下のセットアップが前提となっています
+ハンズオンを実施する上では、以下のセットアップが前提となっています
 
 - Ubuntu 24.04
   - IIJ 社内における Bootcamp 実施時の推奨環境が Ubuntu となっているため
@@ -26,10 +27,12 @@ IIJ Bootcamp における Ansibleの項ではこちらで示す環境を前提�
 - rootユーザによるsshログインを許可している
 - rootパスワードが安直な文字列になっている
 
-## TO DO
+## ToDo
 
 それでは演習に必要な環境のセットアップを行います。
-以下の一連の作業を実施すると図に示したような環境が構築されます。
+以下の一連の作業を実施すると、下記の図に示したような環境が構築されます。
+
+![alt text](images/env-image.png)
 
 1. Hands-On Materialのダウンロード
    ```sh
@@ -37,8 +40,8 @@ IIJ Bootcamp における Ansibleの項ではこちらで示す環境を前提�
    ```
 
 1. LXD コンテナインフラ環境のセットアップ
-   ディレクトリの移動
    ```bash
+   ## ディレクトリの移動
    $ cd ansible-exercise
     ## LXD のインストールとセットアップ
    $ ./setup/setup_lxd.sh
@@ -63,21 +66,19 @@ IIJ Bootcamp における Ansibleの項ではこちらで示す環境を前提�
 
 ## Recommended
 
-このハンズオンでの推奨環境として`Visual Studio Code`(以下、vscode)を指定します。
+このハンズオンでの推奨環境として`Visual Studio Code`(以下、VS Code)を指定します。
 ソースコードエディタや開発環境に特にこだわりがない人は、以下の環境を整えておくとスムーズにハンズオンを進めることができます。
 
-### vscode
+### VS Code
 
-vscodeとはマイクロソフトが開発したオープンソースのソースコードエディタです。
+VS Code とはマイクロソフトが開発したオープンソースのソースコードエディタです。
 拡張機能(extension)をインストールすることで様々な言語のソースコードを効率よく編集することができます。
-Stack Overflow 2019 Developer Surveyでは、vscodeが最も人気のある開発者環境ツールとしてランクインしています。
 
 [公式サイト](https://code.visualstudio.com/)から環境に合わせてインストールしましょう。
 
 #### Ansible Extension
 
-vscodeにはRed Hat社よりAnsibleのplaybookを書く為に公式のExtensionが提供されています。
-補完や構文チェックなどの機能が備わっているため、可能な限り使うようにしましょう
+VS Code にはRed Hat社よりAnsibleのplaybookを書く為に公式の Extension が提供されています。
+補完や構文チェックなどの機能が備わっているため、使用することをおすすめします。
 
 [公式サイト](https://marketplace.visualstudio.com/items?itemName=redhat.ansible)
-
