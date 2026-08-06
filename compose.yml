@@ -1,0 +1,67 @@
+---
+services:
+  console:
+    image: console_con:dev
+    container_name: "iijbootcamp_ansible_console"
+    hostname: ansible_console
+    working_dir: /
+    privileged: true
+    tty: true
+    networks:
+      vm_net:
+        ipv4_address: 10.200.10.99
+    volumes:
+      - type: bind
+        source: ./ansible
+        target: /ansible
+
+  host00:
+    image: target_con:dev
+    container_name: "iijbootcamp_ansible_host00"
+    hostname: ansible_host00
+    privileged: true
+    tty: true
+    networks:
+      vm_net:
+        ipv4_address: 10.200.10.100
+
+  host01:
+    image: target_con:dev
+    container_name: "iijbootcamp_ansible_host01"
+    hostname: ansible_host01
+    privileged: true
+    tty: true
+    networks:
+      vm_net:
+        ipv4_address: 10.200.10.101
+
+  web00:
+    image: target_con:dev
+    container_name: "iijbootcamp_ansible_web00"
+    hostname: ansible_web00
+    privileged: true
+    tty: true
+    ports:
+      - "18080:80"
+    networks:
+      vm_net:
+        ipv4_address: 10.200.10.10
+
+  app00:
+    image: target_con:dev
+    container_name: "iijbootcamp_ansible_app00"
+    hostname: ansible_app00
+    privileged: true
+    tty: true
+    expose:
+      - "8080"
+    networks:
+      vm_net:
+        ipv4_address: 10.200.10.11
+
+networks:
+  vm_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.200.10.0/24
