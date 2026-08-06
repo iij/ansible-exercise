@@ -12,27 +12,27 @@
 
 - Ubuntu 24.04
   - IIJ 社内における Bootcamp 実施時の推奨環境が Ubuntu となっているため
-  - これ以外での環境でも実施可能ですが、`/setup`下のスクリプトについては書き換えが必要です
+  - これ以外でのディストリビューションでも基本的には動くはずです
 - git
   - 導入されていない場合は事前に `sudo apt install git` などでインストールしておいてください
-- lxd
-  - Ansible 適用先ターゲットノードの構築のために使用します
+- Docker, Docker Compose
+  - Ansible 適用元・適用先ホストの構築のために使用します
 
 ## Caution
 
-<!-- TODO: この項目は不要かも -->
-このハンズオンの実行では、以下のような問題点があります。
-演習の為に敢えて設定していますが、本来は好ましい設定ではないため、本番環境では適切な設定を行ってください
+このハンズオンの実行環境には、以下のような問題点があります。
+演習環境の簡略化の為にあえて設定していますが、本来は好ましい設定ではないため、本番環境では適切な設定を行ってください。
 
-- rootユーザによるsshログインを許可している
-- rootパスワードが安直な文字列になっている
+- root ユーザによるパスワードでの ssh ログインを許可している
+- root パスワードが安直な文字列になっている
 
 ## ToDo
 
 それでは演習に必要な環境のセットアップを行います。
 以下の一連の作業を実施すると、下記の図に示したような環境が構築されます。
 
-LXD を使用して立ち上げる複数のコンテナを擬似的な Ansible 適用先のホストとし、手元環境を Ansible 実行元ホストとして使うイメージになります。
+consle コンテナが Ansible 実行元ホスト、それ以外が Ansible 適用先ホストとなるイメージです。
+以降、前者を「コンソールコンテナ」後者を「ターゲットコンテナ」と呼称します。
 
 ![alt text](images/env-image.png)
 
@@ -42,114 +42,61 @@ LXD を使用して立ち上げる複数のコンテナを擬似的な Ansible �
    $ cd ansible-exercise
    ```
 
-1. ssh ログイン用公開鍵の登録
+1. Docker コンテナ環境の立ち上げ
 
-    演習環境のコンテナにログインするため、公開鍵を生成します。
-
-    ```sh
-    $ ssh-keygen -q -t ed25519 -N '' -f ~/.ssh/bootcamp_ansible_key
+    ```
+    $ docker compose up -d
     ```
 
-    生成した公開鍵を確認し、コピーします。（マウスで選択し Ctrl+Shift+C など）
-
-    ```sh
-    $ cat ~/.ssh/bootcamp_ansible_key.pub
-    ## 表示された公開鍵をまるごとコピーしておく
-    ```
-
-    公開鍵生成後、以下のようにセットアップ用スクリプトに鍵を設定しておいてください。
-    ./setup/lxd_scripts/setup_for_ansible.sh を以下のように編集します。
-
-    このスクリプトは lxd コンテナにマウントされ、後の手順で使用します。
-    ```sh
-    #!/bin/bash
-
-    BOOTCAMP_ANSIBLE_KEY='your-key' # この your-key をコピーした鍵で置き換えて保存
-    ...
-    ```
-
-1. LXD コンテナインフラ環境のセットアップ
-
-   ターゲットノード（Ansible の適用先環境）を自動で立ち上げるスクリプトを用意しています。
-   以下のように実行してください。
+1. コンソールコンテナ動作確認
    ```bash
-    ## LXD のインストールとセットアップ
-   $ ./setup/setup_lxd.sh
-    ## LXD でのターゲットノードのセットアップ
-   $ ./setup/setup_target_nodes.sh
+   $ docker compose exec console bash
+   [root@ansible_console /]
+   # 上記のプロンプトが表示されればOK
+   ## Ctrl + D で抜ける
+   ```
+   他のコンテナとの疎通を確認します。
+   ```bash
+    [root@ansible_console /]# ping 10.200.10.101 -c 3
+    PING 10.200.10.101 (10.200.10.101) 56(84) bytes of data.
+    64 bytes from 10.200.10.101: icmp_seq=1 ttl=64 time=0.030 ms
+    64 bytes from 10.200.10.101: icmp_seq=2 ttl=64 time=0.031 ms
+    64 bytes from 10.200.10.101: icmp_seq=3 ttl=64 time=0.041 ms
+
+    --- 10.200.10.101 ping statistics ---
+    3 packets transmitted, 3 received, 0% packet loss, time 2041ms
+    rtt min/avg/max/mdev = 0.030/0.034/0.041/0.005 ms
    ```
 
-1. コンテナ動作確認
-   ```bash
-   $ sudo lxc exec host00 -- bash
-   ## root@host00:~# というプロンプトが表示されればOK
-   ## Ctrl + C で抜ける
-   ```
-   ```bash
-   $ ping 10.200.10.101
-   ## 出力例
-   PING 10.200.10.101 (10.200.10.101) 56(84) bytes of data.
-   64 bytes from 10.200.10.101: icmp_seq=1 ttl=64 time=0.039 ms
-   64 bytes from 10.200.10.101: icmp_seq=2 ttl=64 time=0.053 ms
-   64 bytes from 10.200.10.101: icmp_seq=2 ttl=64 time=0.053 ms
-   ...
-   ```
+1. ターゲットコンテナの動作確認
 
-1. ターゲットノードの初期構築
-
-    ターゲットノードとなる LXD コンテナに、Ansible を適用するまでの初期構築作業を実施します。
-    詳細は講義本編で説明しますが、Ansible を実際に適用するためには、大きく以下のような作業が必要になります。
-
-    - ターゲットノードへネットワーク的な疎通を確保する
-      - 今回は既に完了しています（上記の手順で確認済）
-    - Ansible 適用専用のユーザを作成します
-      - 通常ログインで使用するユーザと兼用させることも可能ですが、セキュリティ面から分けることを推奨
-      - 今回は ansible-deploy ユーザを作成します
-    - Ansible 適用専用ユーザで、Ansible 実行ホストから ssh ログインできるようにする
-      - 通常であれば公開鍵を登録する作業を実施します
-    - Ansible 適用専用ユーザで、パスワードレスの sudo を可能にする
-      - Ansible タスクの中には特権を要求するものがあるので、sudo 権限が必要になります
-      - 通常であれば /etc/sudoers を編集するなどの作業を実施します
-
-    今回は簡単のため、これらの手順を LXD コンテナにマウントしたスクリプトで自動で実行できるようにしています。実際に現場で Ansible を使用する際には手動 or 何らかの手段で上記のような作業が必要となりますので、覚えておくとよいでしょう。
-
-    自動設定スクリプトは以下のように順次実行してください。
+    まずコンソールコンテナに ssh ログインできるか確認します。
     ```
-    $ sudo lxc exec app00 -- bash /mnt/lxd_scripts/setup_for_ansible.sh
-    ## 以下のような出力になるはず
-    Creating ansible-deploy user...
-    info: Adding user `ansible-deploy' ...
-    info: Selecting UID/GID from range 1000 to 59999 ...
-    info: Adding new group `ansible-deploy' (1001) ...
-    info: Adding new user `ansible-deploy' (1001) with group `ansible-deploy (1001)' ...
-    info: Creating home directory `/home/ansible-deploy' ...
-    info: Copying files from `/etc/skel' ...
-    info: Adding new user `ansible-deploy' to supplemental / extra groups `users' ...
-    info: Adding user `ansible-deploy' to group `users' ...
-    Setting ansible-deploy to sudoers without password...
-    ansible-deploy ALL=(ALL) NOPASSWD:ALL
-    Adding bootcamp_ansible_key to /home/ansible-deploy/.ssh/authorized_keys ...
-    Completed!
-    ## すべてのホストに対して実行する
-    $ sudo lxc exec web00 -- bash /mnt/lxd_scripts/setup_for_ansible.sh
-    $ sudo lxc exec host00 -- bash /mnt/lxd_scripts/setup_for_ansible.sh
-    $ sudo lxc exec host01 -- bash /mnt/lxd_scripts/setup_for_ansible.sh
-    ```
-
-1. ターゲットノードの設定状態確認
-
-    コンテナに ssh ログインできるか確認します。
-    ```
-    $ ssh ansible-deploy@10.200.10.10 -i ~/.ssh/bootcamp_ansible_key
-    ## Are you sure you want to continue connecting (yes/no/[fingerprint])? ときかれたら yes と入力し Enter
+   $ ssh root@10.200.10.99
+    The authenticity of host '10.200.10.99 (10.200.10.99)' can't be established.
+    ED25519 key fingerprint is SHA256:8mIYyvkyX5UdsrG9t/S3WQGwXrztKJAS1LXb17Rb58Q.
+    This key is not known by any other names.
+    Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+    ## yes と答えて Enter
+    Warning: Permanently added '10.200.10.99' (ED25519) to the list of known hosts.
+    root@10.200.10.99's password:   ## パスワードは ansible
     ## 以下のようなプロンプトに変わったらOK
-    ansible-deploy@web00:~$
+    [root@ansible_console ~]#
     ```
 
-    コンテナ内で、パスワードレスで sudo できるか確認します。
+    コンソールコンテナから、他のターゲットコンテナへ ssh ログインできるか確認します。
     ```
-    ansible-deploy@web00:~$ sudo ls /root
-    ## 何も出力されなければOK
+    [root@ansible_console ~]# ssh root@ansible_host00
+    The authenticity of host 'ansible_host00 (10.200.10.100)' can't be established.
+    ED25519 key fingerprint is SHA256:WaNCmS95atQrn+Qv+05RGtkabxgqegpQ7ibQJwUHlsA.
+    This host key is known by the following other names/addresses:
+        ~/.ssh/known_hosts:1: 10.200.10.10
+    Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+    ## yes と答えて Enter
+    Warning: Permanently added 'ansible_host00' (ED25519) to the list of known hosts.
+    root@ansible_host00's password: ## パスワードは ansible
+    ## 以下のようなプロンプトに変わったらOK
+    [root@ansible_host00 ~]#
     ```
     特に問題がなければ、この確認は1つのコンテナだけでOKです。
 
@@ -164,6 +111,8 @@ VS Code とはマイクロソフトが開発したオープンソースのソー
 拡張機能(extension)をインストールすることで様々な言語のソースコードを効率よく編集することができます。
 
 [公式サイト](https://code.visualstudio.com/)から環境に合わせてインストールしましょう。
+
+なお、本リポジトリの `/ansible` ディレクトリを VSCode で開くことで、Playbook 等を快適に編集できるようになります。
 
 #### Ansible Extension
 
