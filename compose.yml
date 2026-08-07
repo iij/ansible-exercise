@@ -1,7 +1,7 @@
 ---
 services:
   console:
-    image: console_con:dev
+    image: ghcr.io/nk-yut4/ansible-exercise/console_con:latest
     container_name: "iijbootcamp_ansible_console"
     hostname: ansible_console
     working_dir: /
@@ -16,7 +16,7 @@ services:
         target: /ansible
 
   host00:
-    image: target_con:dev
+    image: ghcr.io/nk-yut4/ansible-exercise/target_con:latest
     container_name: "iijbootcamp_ansible_host00"
     hostname: ansible_host00
     privileged: true
@@ -26,7 +26,7 @@ services:
         ipv4_address: 10.200.10.100
 
   host01:
-    image: target_con:dev
+    image: ghcr.io/nk-yut4/ansible-exercise/target_con:latest
     container_name: "iijbootcamp_ansible_host01"
     hostname: ansible_host01
     privileged: true
@@ -36,7 +36,7 @@ services:
         ipv4_address: 10.200.10.101
 
   web00:
-    image: target_con:dev
+    image: ghcr.io/nk-yut4/ansible-exercise/target_con:latest
     container_name: "iijbootcamp_ansible_web00"
     hostname: ansible_web00
     privileged: true
@@ -48,7 +48,7 @@ services:
         ipv4_address: 10.200.10.10
 
   app00:
-    image: target_con:dev
+    image: ghcr.io/nk-yut4/ansible-exercise/target_con:latest
     container_name: "iijbootcamp_ansible_app00"
     hostname: ansible_app00
     privileged: true
