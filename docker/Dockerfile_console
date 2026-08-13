@@ -6,6 +6,7 @@ RUN dnf -y update && \
         bash-completion \
         iproute \
         openssh-server \
+        sshpass \
         git \
         vim \
         less \
