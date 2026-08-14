@@ -1,4 +1,4 @@
 
 [web]
-web00 ansible_host=10.200.10.10
-app00 ansible_host=10.200.10.11
+web00
+app00
