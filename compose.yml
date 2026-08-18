@@ -1,62 +1,77 @@
 ---
-version: "3.7"
 services:
   console:
-    image: ghcr.io/ainamori-iij/iijbootcamp_ansible_console 
+    image: ghcr.io/nk-yut4/ansible-exercise/console_con:latest
     container_name: "iijbootcamp_ansible_console"
     hostname: ansible_console
-    working_dir: /ansible
+    working_dir: /
     privileged: true
+    cgroup: host
+    tmpfs: /run
     tty: true
     networks:
       vm_net:
-        ipv4_address: 192.0.2.2
+        ipv4_address: 10.200.10.99
     volumes:
-      - ./ansible:/ansible
+      - type: bind
+        source: ./ansible
+        target: /ansible
+
   host00:
-    image: ghcr.io/ainamori-iij/iijbootcamp_ansible_host 
+    image: ghcr.io/nk-yut4/ansible-exercise/target_con:latest
     container_name: "iijbootcamp_ansible_host00"
     hostname: ansible_host00
     privileged: true
+    cgroup: host
+    tmpfs: /run
     tty: true
     networks:
       vm_net:
-        ipv4_address: 192.0.2.100
+        ipv4_address: 10.200.10.100
+
   host01:
-    image: ghcr.io/ainamori-iij/iijbootcamp_ansible_host 
+    image: ghcr.io/nk-yut4/ansible-exercise/target_con:latest
     container_name: "iijbootcamp_ansible_host01"
     hostname: ansible_host01
     privileged: true
+    cgroup: host
+    tmpfs: /run
     tty: true
     networks:
       vm_net:
-        ipv4_address: 192.0.2.101
+        ipv4_address: 10.200.10.101
+
   web00:
-    image: ghcr.io/ainamori-iij/iijbootcamp_ansible_host 
+    image: ghcr.io/nk-yut4/ansible-exercise/target_con:latest
     container_name: "iijbootcamp_ansible_web00"
     hostname: ansible_web00
     privileged: true
+    cgroup: host
+    tmpfs: /run
     tty: true
     ports:
       - "18080:80"
     networks:
       vm_net:
-        ipv4_address: 192.0.2.10
+        ipv4_address: 10.200.10.10
+
   app00:
-    image: ghcr.io/ainamori-iij/iijbootcamp_ansible_host 
+    image: ghcr.io/nk-yut4/ansible-exercise/target_con:latest
     container_name: "iijbootcamp_ansible_app00"
     hostname: ansible_app00
     privileged: true
+    cgroup: host
+    tmpfs: /run
     tty: true
     expose:
       - "8080"
     networks:
       vm_net:
-        ipv4_address: 192.0.2.11
+        ipv4_address: 10.200.10.11
 
 networks:
   vm_net:
     ipam:
       driver: default
       config:
-        - subnet: 192.0.2.0/24
+        - subnet: 10.200.10.0/24
